@@ -1,0 +1,16 @@
+{
+  "name": "ugc-culte-scrapper",
+  "version": "0.1.0",
+  "main": "src/main.mjs",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@sentry/node": "^5.5.0",
+    "axios": "^0.19.0",
+    "dotenv": "^8.0.0",
+    "moment": "^2.24.0",
+    "puppeteer": "^1.18.1",
+    "twit": "^2.2.11"
+  }
+}
