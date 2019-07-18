@@ -15,7 +15,7 @@ export default {
         return JSON.parse(existingJson);
     },
 
-    save: database => {
+    save (database) {
         fs.writeFileSync(this.path, JSON.stringify(database));
     }
 }
