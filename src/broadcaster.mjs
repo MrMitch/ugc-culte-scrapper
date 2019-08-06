@@ -1,6 +1,7 @@
 import fs from "fs";
-import path from "path";
 import os from "os";
+import path from "path";
+import process from "process";
 import Axios from "axios";
 import Twitter from "twit";
 import Sentry from '@sentry/node';
@@ -94,6 +95,14 @@ async function downloadAndPublishCover(screening) {
 }
 
 async function postTweet(screening, text) {
+    const dryRun = process.env.DRY_RUN;
+
+    if (!!dryRun && (dryRun === "true" || dryRun === "1")) {
+        console.log(text + (screening.cover ? ` (${screening.cover})` : ''));
+
+        return { text };
+    }
+
     const tweet = { status : text };
 
     if (screening.cover) {
