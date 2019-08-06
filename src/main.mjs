@@ -31,7 +31,7 @@ const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));
     const scrappedScreenings = await scrapper.scrape(urls.theater(theater));
 
     // store if necessary
-    for (const screening of scrappedScreenings) {
+    for (const screening of scrappedScreenings.filter(s => momentFromTimestamp(s.timestamp).isAfter())) {
         let existingScreening = screenings.find(s => s.id === screening.id);
 
         if (!existingScreening) {

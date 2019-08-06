@@ -81,7 +81,7 @@ async function scrape(url) {
         screening.bookingUrl = urls.screening(screening.screeningId);
     }
 
-    return screenings.filter(screening => momentFromTimestamp(screening.timestamp).isAfter());
+    return screenings;
 }
 
 export default { scrape }
