@@ -49,6 +49,7 @@ async function scrape(url) {
             const descriptionContainer = screeningContainer.querySelector(".description");
             const titleContainer = descriptionContainer.querySelector(".title");
             const screeningAnchor = descriptionContainer.querySelector("a");
+            const typeContainer = descriptionContainer.querySelector(".period .type");
 
             // no need to import URL, it exists in the context of the page
             const url = new URL(screeningAnchor.href);
@@ -57,12 +58,14 @@ async function scrape(url) {
             const title = titleContainer.innerText.trim();
             const cover = pictureContainer.src;
             const date = screeningAnchor.innerText.trim();
+            const type = typeContainer.innerText.toUpperCase().trim();
 
             return {
                 title,
                 screeningId,
                 cover,
-                date
+                date,
+                type
             }
         });
     });

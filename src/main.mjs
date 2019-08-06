@@ -34,6 +34,11 @@ const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));
     for (const screening of scrappedScreenings.filter(s => momentFromTimestamp(s.timestamp).isAfter())) {
         let existingScreening = screenings.find(s => s.id === screening.id);
 
+        if (screening.type !== 'UGC CULTE') {
+            Sentry.captureMessage(`Non UGC Culte screening scrapped (${screening.type}): ${screening.title}`);
+            continue;
+        }
+
         if (!existingScreening) {
             screenings.push(screening);
             screeningsToAnnounce.push(screening);
