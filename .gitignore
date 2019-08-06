@@ -39,4 +39,6 @@ jspm_packages/
 .env.test
 
 # app specific files
-films.json
+/films.json
+/test/fixtures/films-test.json
+/coverage

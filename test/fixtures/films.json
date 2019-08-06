@@ -1,0 +1,29 @@
+[
+  {
+    "title": "LA CITÉ DE LA PEUR",
+    "screeningId": "330471256963",
+    "cover": "https://www.ugc.fr/dynamique/films/15/1215/fr/poster/small/1132544_palegrey_6.jpg",
+    "date": "jeudi 11 juillet à 20h00",
+    "timestamp": 1562868000,
+    "id": "1562868000-330471256963-cab404c12d34098ef069ef61e6e4562a",
+    "bookingUrl": "https://www.ugc.fr/reservationSeances.html?id=330471256963"
+  },
+  {
+    "title": "PULP FICTION",
+    "screeningId": "330471256964",
+    "cover": "https://www.ugc.fr/dynamique/films/55/2355/fr/poster/small/18846059_palegrey_4.jpg",
+    "date": "jeudi 18 juillet à 20h00",
+    "timestamp": 1563472800,
+    "id": "1563472800-330471256964-90d13d940e03e14e16dce6dcf22babf2",
+    "bookingUrl": "https://www.ugc.fr/reservationSeances.html?id=330471256964"
+  },
+  {
+    "title": "LE SILENCE DES AGNEAUX",
+    "screeningId": "330471256965",
+    "cover": "https://www.ugc.fr/dynamique/films/43/1643/fr/poster/small/1704485_palegrey_2.jpg",
+    "date": "jeudi 25 juillet à 20h00",
+    "timestamp": 1564077600,
+    "id": "1564077600-330471256965-51ac7a34c7723d85ccc3e261fd6b28c9",
+    "bookingUrl": "https://www.ugc.fr/reservationSeances.html?id=330471256965"
+  }
+]
