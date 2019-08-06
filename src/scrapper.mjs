@@ -15,11 +15,12 @@ async function scrape(url) {
     }
 
     // remove ad overlay that messes-up with the `click` method
-    await page.evaluate(() => {
-        if (window.top.closeAdLayer) {
-            window.top.closeAdLayer();
-        }
-    });
+    await page.evaluate(() => { window.top && window.top.closeAdLayer && window.top.closeAdLayer()});
+
+    await page.waitFor(500);
+
+    // remove RGPD overlay that might also mess-up with the `click` method
+    await page.evaluate(() => { document.querySelector('.rgpd-custom').remove(); });
 
     await page.waitFor(500);
 
