@@ -1,10 +1,13 @@
 {
   "name": "ugc-culte-scrapper",
   "version": "0.1.0",
-  "main": "src/main.mjs",
+  "main": "src/main.js",
   "license": "MIT",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=12 <13"
+  },
   "dependencies": {
     "@sentry/node": "^5.5.0",
     "axios": "^0.19.0",
@@ -24,7 +27,18 @@
     "jest-extended": "^0.11.2"
   },
   "scripts": {
-    "scrapper": "node --experimental-modules src/main.mjs",
+    "scrapper": "node src/main.js",
     "test": "jest --notify --coverage --detectOpenHandles"
+  },
+  "jest": {
+    "clearMocks": true,
+    "coverageDirectory": "coverage",
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ]
   }
 }

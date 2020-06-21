@@ -5,7 +5,7 @@ import process from "process";
 import Axios from "axios";
 import Twitter from "twit";
 import Sentry from '@sentry/node';
-import scheduler from './scheduler';
+import scheduler from './scheduler.js';
 
 let client = null;
 

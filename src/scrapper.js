@@ -1,7 +1,7 @@
 import crypto from "crypto";
-import moment, { momentFromTimestamp } from "./moment";
+import moment, { momentFromTimestamp } from "./moment.js";
 import puppeteer from "puppeteer";
-import urls from "./urls";
+import urls from "./urls.js";
 import Sentry from '@sentry/node';
 
 const md5 = data => crypto.createHash('md5').update(data).digest("hex");

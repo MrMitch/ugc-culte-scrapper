@@ -11,13 +11,13 @@ if (dsn) {
     Sentry.init({ dsn });
 }
 
-import broadcaster from "./broadcaster";
-import database from "./database";
-import scheduler from "./scheduler";
-import scrapper from "./scrapper"
-import urls from "./urls";
-import theaters from "./theaters";
-import { momentFromTimestamp, sortByTimestampDesc } from "./moment";
+import broadcaster from "./broadcaster.js";
+import database from "./database.js";
+import scheduler from "./scheduler.js";
+import scrapper from "./scrapper.js"
+import urls from "./urls.js";
+import theaters from "./theaters.js";
+import { momentFromTimestamp, sortByTimestampDesc } from "./moment.js";
 
 const theater = theaters.validate(process.env.UGC_THEATER || process.argv[2]);
 const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));

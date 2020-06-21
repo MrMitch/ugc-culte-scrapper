@@ -1,4 +1,4 @@
-import moment, { momentFromTimestamp } from "./moment";
+import moment, { momentFromTimestamp } from "./moment.js";
 
 const now = moment().startOf("minute");
 const tomorrow = moment().startOf("minute").add(1, "day");

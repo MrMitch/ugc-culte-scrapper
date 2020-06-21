@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import database from "../src/database";
+import database from "../src/database.js";
 
 test("database.read doesn't fail when file doesn't exist (i.e. on first run)", () => {
     expect(database.path).toBeNull();
@@ -30,6 +30,6 @@ test("database.save creates file if necessary", () => {
 });
 
 test("database reads existing file", () => {
-    const db = database.read(path.resolve("test/fixtures/films.json"));
+    const db = database.read(path.resolve("test/fixtures/films-theater-30.json"));
     expect(db).toBeArrayOfSize(3);
 });
