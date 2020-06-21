@@ -40,5 +40,6 @@ jspm_packages/
 
 # app specific files
 /films.json
+/films-theater-*.json
 /test/fixtures/films-test.json
 /coverage

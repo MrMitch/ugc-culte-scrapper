@@ -31,7 +31,7 @@ const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));
     ];
     const screeningsToRemind = [];
     const screeningsToAnnounce = [];
-    const screenings = database.read(path.join(rootDir, 'films.json'));
+    const screenings = database.read(path.join(rootDir, `films-theater-${theater}.json`));
 
     // scrape
     const scrappedScreenings = await scrapper.scrape(urls.theater(theater));
