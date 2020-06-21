@@ -3,8 +3,8 @@ import process from "process";
 import path from "path";
 import Sentry from "@sentry/node";
 
-// read .env file
-dotenv.config();
+// read .env file from UGC_ENV_PATH or fallback to $PWD/.env
+dotenv.config({ path: process.env.UGC_ENV_PATH || path.join(process.cwd(), '.env') });
 
 const dsn = process.env.SENTRY_DSN;
 if (dsn) {

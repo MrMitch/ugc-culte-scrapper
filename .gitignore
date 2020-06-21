@@ -37,6 +37,7 @@ jspm_packages/
 # dotenv environment variables file
 .env
 .env.test
+.env.*
 
 # app specific files
 /films.json
