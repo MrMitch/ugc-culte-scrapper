@@ -23,6 +23,12 @@ const theater = theaters.validate(process.env.UGC_THEATER || process.argv[2]);
 const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));
 
 (async () => {
+    const relevantScreeningTypes = [
+        'UGC CULTE',
+        'LES INCONTOURNABLES',
+        '1 JOUR, 1 FILM',
+        'LE CHOIX DU DIRECTEUR',
+    ];
     const screeningsToRemind = [];
     const screeningsToAnnounce = [];
     const screenings = database.read(path.join(rootDir, 'films.json'));
@@ -34,8 +40,8 @@ const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));
     for (const screening of scrappedScreenings.filter(s => momentFromTimestamp(s.timestamp).isAfter())) {
         let existingScreening = screenings.find(s => s.id === screening.id);
 
-        if (screening.type !== 'UGC CULTE') {
-            Sentry.captureMessage(`Non UGC Culte screening scrapped (${screening.type}): ${screening.title}`);
+        if (!relevantScreeningTypes.includes(screening.type)) {
+            Sentry.captureMessage(`Non relevant screening scrapped (${screening.type}): ${screening.title}`);
             continue;
         }
 

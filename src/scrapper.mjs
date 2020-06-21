@@ -25,58 +25,105 @@ async function scrape(url) {
 
     await page.waitFor(500);
 
-    const culteAnchorId = await page.$$eval("#event .module-status-filter .status-filter-list li a", anchors => {
-        const anchor = anchors.find(a => a.innerText.toUpperCase().trim() === "UGC CULTE");
+    const sectionAnchorIds = await page.$$eval("#event .module-status-filter .status-filter-list li a", anchors => {
+        const relevantTypes = ["UGC CULTE", "SÉANCES SPÉCIALES"];
+        const relevantAnchors = anchors.filter(a => relevantTypes.includes(a.innerText.toUpperCase().trim()));
 
-        if (!anchor) {
-            return null;
-        }
-
-        return anchor.id;
+        return relevantAnchors.map(anchor => anchor.id);
     });
 
-    if (culteAnchorId === null) {
-        throw new Error("Unable to get culte anchor id");
+    if (sectionAnchorIds.length === 0) {
+        throw new Error("Unable to get relevant anchor id");
     }
 
-    // click on the list to show the "Culte" sreenings
-    await page.click(`#${culteAnchorId}`);
-    await page.waitFor(1000);
-
-    const screenings = await page.$$eval('#event .push-event', screeningsContainer => {
-        return screeningsContainer.map(screeningContainer => {
-            // this is executed in the context of the page
-            const pictureContainer = screeningContainer.querySelector(".picture img");
-            const descriptionContainer = screeningContainer.querySelector(".description");
-            const titleContainer = descriptionContainer.querySelector(".title");
-            const screeningAnchor = descriptionContainer.querySelector("a");
-            const typeContainer = descriptionContainer.querySelector(".period .type");
-            const dateContainer = screeningContainer.querySelector('.date');
-
-            // no need to import URL, it exists in the context of the page
-            const url = new URL(screeningAnchor.href);
-
-            const screeningId = url.searchParams.get("seanceId");
-            const title = titleContainer.innerText.trim();
-            const cover = pictureContainer.src;
-            const date = screeningAnchor.innerText.trim();
-            const type = typeContainer.innerText.toUpperCase().trim();
-
-            const shortDateParts = dateContainer.innerText.trim().match(/(?<day>\d+)\s+(?<month>\d+)/);
-            let month = null;
-            if (shortDateParts.groups && shortDateParts.groups.month) {
-                month = parseInt(shortDateParts.groups.month);
-            }
-
-            return {
-                title,
-                screeningId,
-                cover,
-                date,
-                month,
-                type
-            }
+    let screenings = [];
+    for (const sectionAnchorId of sectionAnchorIds) {
+        Sentry.addBreadcrumb({
+            category: 'scrapping',
+            message: 'Starting to scrap a new section',
+            level: Sentry.Severity.Info
         });
+
+        // click on the list to show the relevant screenings
+        let sliceAnchorId = sectionAnchorId
+        let sectionHasMoreEvents = true;
+        let i = 0;
+
+        do {
+            Sentry.addBreadcrumb({
+                category: 'scrapping',
+                message: `iteration (0-based): ${i}, sliceAnchorId: ${sliceAnchorId}`,
+                level: Sentry.Severity.Info
+            });
+
+            if (sliceAnchorId === null) {
+                sectionHasMoreEvents = false;
+                break;
+            }
+
+            if (sliceAnchorId === '') {
+                Sentry.captureMessage('Unable to proceed further without an id to click');
+                break;
+            }
+
+            // load the next slice of events, either by clicking the top section link or by clicking the "Next" button
+            // in the pagination of the current section
+            await page.click(`#${sliceAnchorId}`);
+            await page.waitFor(2000); // give it time to load
+
+            const screeningsSlice = await page.$$eval('#event .push-event', screeningsContainers => {
+                return screeningsContainers.map(screeningContainer => {
+                    // this is executed in the context of the page
+                    const pictureContainer = screeningContainer.querySelector(".picture img");
+                    const descriptionContainer = screeningContainer.querySelector(".description");
+                    const titleContainer = descriptionContainer.querySelector(".title");
+                    const screeningAnchor = descriptionContainer.querySelector("a");
+                    const typeContainer = descriptionContainer.querySelector(".period .type");
+                    const dateContainer = screeningContainer.querySelector('.date');
+
+                    // no need to import URL, it exists in the context of the page
+                    const url = new URL(screeningAnchor.href);
+
+                    const screeningId = url.searchParams.get("seanceId");
+                    const title = titleContainer.innerText.trim();
+                    const cover = pictureContainer.src;
+                    const date = screeningAnchor.innerText.trim();
+                    const type = typeContainer.innerText.toUpperCase().trim();
+
+                    const shortDateParts = dateContainer.innerText.trim().match(/(?<day>\d+)\s+(?<month>\d+)/);
+                    let month = null;
+                    if (shortDateParts.groups && shortDateParts.groups.month) {
+                        month = parseInt(shortDateParts.groups.month);
+                    }
+
+                    return {
+                        title,
+                        screeningId,
+                        cover,
+                        date,
+                        month,
+                        type
+                    }
+                });
+            });
+
+            screenings = screenings.concat(screeningsSlice);
+
+            // get the id of the pagination link if there are more events to load in this section.
+            // use $$eval instead of $eval which throws if no element is found, when $$eval return an empty array
+            sliceAnchorId = await page.$$eval('#event .module-pagination a[id^="nextUrl"]', anchors => {
+                return anchors.length > 0 ? anchors[0].id : null;
+            });
+
+            sectionHasMoreEvents = sliceAnchorId !== null;
+            i += 1;
+        } while (sectionHasMoreEvents);
+    }
+
+    Sentry.addBreadcrumb({
+        category: 'scrapping',
+        message: 'Scrapping done',
+        level: Sentry.Severity.Info
     });
 
     await browser.close();
