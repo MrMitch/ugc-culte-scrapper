@@ -22,6 +22,12 @@ import { momentFromTimestamp, sortByTimestampDesc } from "./moment.js";
 const theater = theaters.validate(process.env.UGC_THEATER || process.argv[2]);
 const rootDir = path.normalize(path.join(path.dirname(process.argv[1]), '..'));
 
+Sentry.addBreadcrumb({
+    category: 'scrapping',
+    message: `Processing theater ${theaters.getName(theater)} (${theater})`,
+    level: Sentry.Severity.Info
+});
+
 (async () => {
     const relevantScreeningTypes = [
         'UGC CULTE',

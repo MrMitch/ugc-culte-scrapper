@@ -61,5 +61,17 @@ export default {
         }
 
         return theater;
+    },
+
+    getName (value) {
+        const names = Object.keys(list);
+        const values = Object.values(list);
+
+        const valueIndex = values.indexOf(value);
+        if (valueIndex === -1) {
+            throw new Error(`Unable to find theater name, invalid theater value ${value}`);
+        }
+
+        return names[valueIndex];
     }
 }
