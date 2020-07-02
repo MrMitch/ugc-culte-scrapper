@@ -98,7 +98,7 @@ async function postTweet(screening, text) {
     const dryRun = process.env.DRY_RUN;
 
     if (!!dryRun && (dryRun === "true" || dryRun === "1")) {
-        console.log(text + (screening.cover ? ` (${screening.cover})` : ''));
+        console.log(`${text} ${(screening.cover ? ` (${screening.cover})` : '')}\n\n`);
 
         return { text };
     }
