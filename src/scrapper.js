@@ -135,7 +135,7 @@ async function scrape(url) {
     for (const screening of screenings) {
         let dateObject = moment(screening.date, "dddd DD MMMM HH:mm", "fr");
 
-        // Since the year is not included, moment use the current year as default.
+        // Since the year is not included, moment uses the current year as default.
         // When we are in december, some january dates may already have been announced.
         // For example, on the 17th of december 2019, a screening for the 2nd of january 2020 has been announced.
         // Moment tries to parse it with the current year and an invalid moment object is produced because the
