@@ -34,6 +34,7 @@ Sentry.addBreadcrumb({
         'LES INCONTOURNABLES',
         '1 JOUR, 1 FILM',
         'LE CHOIX DU DIRECTEUR',
+        'EVÈNEMENT',
     ];
     const screeningsToRemind = [];
     const screeningsToAnnounce = [];
