@@ -117,6 +117,22 @@ async function scrape(url) {
 
             sectionHasMoreEvents = sliceAnchorId !== null;
             i += 1;
+
+            // If there is a pagination, go back to the first page before changing section.
+            // This is a workaround for a bug on UGC's site where the pagination is shared between all the sections.
+            // If you are on page 4 of a section and switch to a new section, it tries to load the 4th page of the new
+            // section, which fails if there is no page 4 in the new section.
+            const isLastSection = sectionAnchorIds.indexOf(sectionAnchorId) === sectionAnchorIds.length - 1;
+            if (!sectionHasMoreEvents && !isLastSection) {
+                const firstSliceAnchorId = await page.$$eval('#event .module-pagination .pagination-list a.pagination-link', anchors => {
+                    return anchors.filter(anchor => anchor.innerText.trim() === '1').map(anchor => anchor.id)[0];
+                });
+
+                if (firstSliceAnchorId) {
+                    await page.click(`#${firstSliceAnchorId}`);
+                    await page.waitFor(2000); // give it time to load
+                }
+            }
         } while (sectionHasMoreEvents);
     }
 
