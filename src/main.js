@@ -35,6 +35,7 @@ Sentry.addBreadcrumb({
         '1 JOUR, 1 FILM',
         'LE CHOIX DU DIRECTEUR',
         'EVÈNEMENT',
+        '', // sometimes the type is omitted, consider all screenings with no type as valid
     ];
     const screeningsToRemind = [];
     const screeningsToAnnounce = [];

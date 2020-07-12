@@ -26,8 +26,8 @@ async function scrape(url) {
     await page.waitFor(500);
 
     const sectionAnchorIds = await page.$$eval("#event .module-status-filter .status-filter-list li a", anchors => {
-        const relevantTypes = ["UGC CULTE", "SÉANCES SPÉCIALES"];
-        const relevantAnchors = anchors.filter(a => relevantTypes.includes(a.innerText.toUpperCase().trim()));
+        const relevantSections = ["UGC CULTE", "SÉANCES SPÉCIALES"];
+        const relevantAnchors = anchors.filter(a => relevantSections.includes(a.innerText.toUpperCase().trim()));
 
         return relevantAnchors.map(anchor => anchor.id);
     });
@@ -88,7 +88,7 @@ async function scrape(url) {
                     const title = titleContainer.innerText.trim();
                     const cover = pictureContainer.src;
                     const date = screeningAnchor.innerText.trim();
-                    const type = typeContainer.innerText.toUpperCase().trim();
+                    const type = typeContainer === null ? '' : typeContainer.innerText.toUpperCase().trim();
 
                     const shortDateParts = dateContainer.innerText.trim().match(/(?<day>\d+)\s+(?<month>\d+)/);
                     let month = null;
