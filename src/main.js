@@ -37,6 +37,11 @@ Sentry.addBreadcrumb({
         'EVÈNEMENT',
         '', // sometimes the type is omitted, consider all screenings with no type as valid
     ];
+    const skippableScreeningTypes = [
+        'JEUNES PARENTS',
+        'FESTIVAL',
+    ];
+
     const screeningsToRemind = [];
     const screeningsToAnnounce = [];
     const screenings = database.read(path.join(rootDir, `films-theater-${theater}.json`));
@@ -49,7 +54,9 @@ Sentry.addBreadcrumb({
         let existingScreening = screenings.find(s => s.id === screening.id);
 
         if (!relevantScreeningTypes.includes(screening.type)) {
-            Sentry.captureMessage(`Non relevant screening scrapped (${screening.type}): ${screening.title}`);
+            if (!skippableScreeningTypes.includes(screening.type)) {
+                Sentry.captureMessage(`Non relevant screening scrapped (${screening.type}): ${screening.title}`);
+            }
             continue;
         }
 
